@@ -3,7 +3,7 @@ FWTOP   = ../../../..
 T2SDK   = $(FWTOP)/build
 LIBDEST = $(FWTOP)/libs/arm
 
-all : $(LIBDEST)/libpy.a $(LIBDEST)/libpym.a
+all : $(LIBDEST)/libpy.a $(LIBDEST)/libpym.a $(LIBDEST)/libpyn.a
 
 include ../../py/mkenv.mk
 
@@ -142,6 +142,11 @@ LIB_PY_OBJS += modtalaria.o
 $(LIBDEST)/libpy.a : $(LIB_PY_OBJS)
 	ar ru $@ $^
 	ranlib $@
+
+$(LIBDEST)/libpyn.a : mphalport.o
+	ar ru $@ $^
+	ranlib $@
+
 
 #
 # libpym
