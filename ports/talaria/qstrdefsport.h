@@ -1,0 +1,11 @@
+// qstrs specific to this port
+Q(gpio)
+Q(get)
+Q(set)
+Q(clr)
+Q(z)
+Q(wifi)
+Q(scan)
+Q(connect)
+Q(time)
+Q(ostimer)
