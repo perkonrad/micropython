@@ -1,5 +1,9 @@
 
-all : libpy.a libpym.a
+FWTOP   = ../../../..
+T2SDK   = $(FWTOP)/build
+LIBDEST = $(FWTOP)/libs/arm
+
+all : $(LIBDEST)/libpy.a $(LIBDEST)/libpym.a
 
 include ../../py/mkenv.mk
 
@@ -8,11 +12,7 @@ QSTR_DEFS = qstrdefsport.h
 
 # include py core make definitions
 include $(TOP)/py/py.mk
-
 include $(TOP)/py/mkrules.mk
-
-T2SDK = ../../../../build
-
 include $(T2SDK)/sdk.mak
 
 CFLAGS += -I$(TOP)/lib/libm/ -I${includedir} -I${includedir}/arm -I. -I$(TOP) -I$(BUILD)
@@ -139,7 +139,7 @@ LIB_PY_OBJS += $(TOP)/lib/utils/pyexec.o
 LIB_PY_OBJS += $(TOP)/lib/mp-readline/readline.o
 LIB_PY_OBJS += modtalaria.o
 
-libpy.a : $(LIB_PY_OBJS)
+$(LIBDEST)/libpy.a : $(LIB_PY_OBJS)
 	ar ru $@ $^
 	ranlib $@
 
@@ -175,12 +175,11 @@ LIB_PYM_OBJS  = $(addprefix $(TOP)/lib/libm/,	\
 		ef_sqrt.o				\
 		)
 
-libpym.a : $(LIB_PYM_OBJS)
+$(LIBDEST)/libpym.a : $(LIB_PYM_OBJS)
 	ar ru $@ $^
 	ranlib $@
 
-$(LIB_PY_OBJS)  : $(BUILD)/genhdr/qstrdefs.generated.h $(BUILD)/genhdr/mpversion.h
-$(LIB_PYM_OBJS) : $(BUILD)/genhdr/qstrdefs.generated.h $(BUILD)/genhdr/mpversion.h
+$(LIB_PY_OBJS) $(LIB_PYM_OBJS) : $(BUILD)/genhdr/qstrdefs.generated.h $(BUILD)/genhdr/mpversion.h
 
 #
 # Auto dependencies
@@ -189,4 +188,6 @@ $(LIB_PYM_OBJS) : $(BUILD)/genhdr/qstrdefs.generated.h $(BUILD)/genhdr/mpversion
 
 clean : clean-lib
 clean-lib :
-	rm -f libpy.a libpym.a $(LIB_PY_OBJS) $(LIB_PYM_OBJS) $(LIB_PYM_OBJS:.o=.d) $(LIB_PY_OBJS:.o=.d)
+	rm -f $(LIBDEST)/libpy.a $(LIBDEST)/libpym.a $(LIB_PY_OBJS) $(LIB_PYM_OBJS) $(LIB_PYM_OBJS:.o=.d) $(LIB_PY_OBJS:.o=.d)
+
+.PHONY : clean-lib
